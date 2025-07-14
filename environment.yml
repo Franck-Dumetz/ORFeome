@@ -29,7 +29,7 @@ dependencies:
   - libiconv=1.16
   - liblzma=5.8.1
   - liblzma-devel=5.8.1
-  - libnsl=2.0.1
+  #- libnsl=2.0.1
   - libpng=1.6.50
   - libsqlite=3.50.2
   - libstdcxx=15.1.0
