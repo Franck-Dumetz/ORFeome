@@ -24,7 +24,7 @@ dependencies:
   - libfreetype=2.13.3
   - libfreetype6=2.13.3
   - libgcc=15.1.0
-  - libgcc-ng=15.1.0
+  #- libgcc-ng=15.1.0
   - libgomp=15.1.0
   - libiconv=1.16
   - liblzma=5.8.1
