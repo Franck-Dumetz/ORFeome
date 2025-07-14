@@ -6,6 +6,7 @@ fasta=""
 unique=0
 multiple=0
 treatments=""
+fastqs=""
 
 usage="" #change later
 
@@ -36,6 +37,10 @@ while [[ $# -gt 0 ]]; do
       treatments="$2"
       shift 2
       ;;
+    -F)
+      fastqs="$2"
+      shift 2
+      ;;
     *)
       echo "<<Invalid flag: $1>>"
       echo "$usage"
@@ -45,13 +50,16 @@ while [[ $# -gt 0 ]]; do
 done
 
 #Argument checking
-if [[ -z "$sras" ]]; then
-  if [[ ! -d fastqs ]]; then
-    echo "<<No SRA ID file was provided and no fastqs directory exists>>"
-    echo "$usage"
-    exit 1
-  fi
+if [[ -z "$sras" && -z "$fastqs" ]]
+  echo "<<No SRA ID file or FASTQ directory provided>>"
+  echo "$usage"
+  exit 1
 fi
+
+if [[ ! -z "$fastqs" ]]
+  fastqs="{fastqs%/}"
+  mkdir fastqs
+  cp "${fastqs}"/* fastqs/
 
 if [[ -z "$gff" ]]; then
   echo "<<No gff file provided>>"
@@ -145,10 +153,7 @@ Rscript Deseq2.R
 echo "Deseq analysis complete. Results in overrep_genes.csv"
 
 #Cleaning all created directories
-if [[ ! -z "$sras" ]]; then
-  rm -r fastqs
-fi
-
+rm -r fastqs
 rm -r trimmed
 rm -r sam
 rm -r bam
