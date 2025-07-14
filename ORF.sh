@@ -8,7 +8,27 @@ multiple=0
 treatments=""
 fastqs=""
 
-usage="" #change later
+usage="
+Usage: ./ORF.sh -A <annotation.gff> -G <genome.fasta> -T <treatments.csv> [-R <sra_list.txt> | -F <fastq_directory>] [-u] [-m]
+
+Required arguments:
+  -A  Path to genome annotation file in GFF format.
+  -G  Path to genome sequence file in FASTA format.
+  -T  Path to treatments CSV file (no header, two columns: sample name, condition).
+
+Input source (choose one):
+  -R  Path to text file with list of SRA accession IDs.
+  -F  Path to directory containing FASTQ files.
+
+Optional flags:
+  -u  Only process uniquely aligned reads.
+  -m  Only process multi-mapped reads.
+      (If neither -u nor -m is used, both types will be processed.)
+
+Note:
+  • Sample names in the treatments file must match the FASTQ filenames or SRA IDs.
+  • Condition names in the treatments file must start with 'treated_' or 'untreated_'.
+"
 
 while [[ $# -gt 0 ]]; do
   key="$1"
@@ -50,16 +70,17 @@ while [[ $# -gt 0 ]]; do
 done
 
 #Argument checking
-if [[ -z "$sras" && -z "$fastqs" ]]
+if [[ -z "$sras" && -z "$fastqs" ]]; then
   echo "<<No SRA ID file or FASTQ directory provided>>"
   echo "$usage"
   exit 1
 fi
 
-if [[ ! -z "$fastqs" ]]
+if [[ ! -z "$fastqs" ]]; then
   fastqs="{fastqs%/}"
   mkdir fastqs
   cp "${fastqs}"/* fastqs/
+fi
 
 if [[ -z "$gff" ]]; then
   echo "<<No gff file provided>>"
