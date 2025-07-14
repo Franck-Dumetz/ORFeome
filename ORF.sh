@@ -79,13 +79,13 @@ fi
 
 #SRA -> FASTQ (populates & creates the fastq directory)
 if [[ ! -d fastqs ]]; then
-  ./fastq.sh $sras > output.log
+  ./fastq.sh $sras
   echo "SRAs converted to FASTQs"
 fi
 
 #FASTQ -> Trimmed FASTQ (populates & creates the trimmed directory)
 mkdir trimmed
-trim_galore --output_dir trimmed fastqs/* >> output.log
+trim_galore --output_dir trimmed fastqs/*
 echo "FASTQs trimmed"
 
 #Trimmed FASTQ -> SAM (populates & creates the sam directory)
