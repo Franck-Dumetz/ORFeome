@@ -33,7 +33,7 @@ dependencies:
   - libpng=1.6.50
   - libsqlite=3.50.2
   - libstdcxx=15.1.0
-  - libstdcxx-ng=11.2.0
+  #- libstdcxx-ng=11.2.0
   - libuuid=2.38.1
   - libxcrypt=4.4.36
   - libxml2=2.9.14
