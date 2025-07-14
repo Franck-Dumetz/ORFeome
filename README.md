@@ -32,3 +32,9 @@ conda activate ORFeome
 
 > **Note:** The order of arguments does not matter, but each flag must come before its corresponding input.
 
+### Running with Test Data
+Use the following command to run with the provided test data set:
+```
+./ORF.sh -A test-data/danae.gff -R test-data/sra_ids.txt -G test-data/danae-genome.fasta -u -T test-data/test-treatments.csv
+```
+
