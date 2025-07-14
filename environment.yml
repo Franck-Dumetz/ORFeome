@@ -32,7 +32,7 @@ dependencies:
   #- libnsl=2.0.1
   - libpng=1.6.50
   - libsqlite=3.50.2
-  - libstdcxx=15.1.0
+  #- libstdcxx=15.1.0
   #- libstdcxx-ng=11.2.0
   - libuuid=2.38.1
   - libxcrypt=4.4.36
