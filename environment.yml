@@ -26,7 +26,6 @@ dependencies:
   - harfbuzz
   - icu
   - isa-l
-  - keyutils
   - krb5
   - lerc
   - libblas
