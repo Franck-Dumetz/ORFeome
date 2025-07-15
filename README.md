@@ -35,6 +35,6 @@ conda activate ORFeome
 ### Running with Test Data
 Use the following command to run with the provided test data set:
 ```
-./ORF.sh -A test-data/danae.gff -R test-data/sra_ids.txt -G test-data/danae-genome.fasta -u -T test-data/test-treatments.csv
+./ORF.sh -A test-data/test-annot.gff -R test-data/test-sra.txt -G test-data/test-genome.fasta -u -T test-data/test-treatments.csv
 ```
 
