@@ -1,3 +1,17 @@
+# ORFeome
+
+A pipeline for analyzing ORFeome screening data under drug pressure conditions.
+
+---
+
+## Overview
+
+**ORFeome** is a set of scripts and tools designed to analyze gain-of-function (GoF) screens in _T. brucei_. It identifies open reading frames (ORFs) that are significantly overrepresented in treated samples compared to untreated controls, helping to discover genes associated different stresses like exposure to drug.
+
+This pipeline was initially developed for analyzing screens in kinetoplastid parasites but can be adapted to other organisms. This pipeline has been developped from Carter M, et al. [A Trypanosoma brucei ORFeome-Based Gain-of-Function Library Identifies Genes That Promote Survival during Melarsoprol Treatment](https://journals.asm.org/doi/full/10.1128/msphere.00769-20?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org). mSphere. 2020 Oct 7;5(5):e00769-20. doi: 10.1128/mSphere.00769-20. PMID: 33028684; PMCID: PMC7568655.
+
+---
+
 ## Conda Environment Setup
 ```
 # Clone the git repository
