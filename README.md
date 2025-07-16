@@ -1,6 +1,6 @@
 # ORFeome
 
-A pipeline for analyzing ORFeome screening data under drug pressure conditions.
+A pipeline for analyzing ORFeome screening data under different stress like drug pressure.
 
 ---
 
@@ -12,14 +12,31 @@ This pipeline was initially developed for analyzing screens in kinetoplastid par
 
 ---
 
+## Key Features
+
+- Handles multiple replicates per condition  
+- Computes differential representation of ORFs  
+- Uses DESeq2 for statistical testing  
+- Outputs a list of candidate ORFs over repressented (logFC >4 and FDR < 0.05)
+- Highly customizable for different datasets and experimental designs
+
+---
+
+
 ## Conda Environment Setup
 ```
 # Clone the git repository
 git clone https://github.com/Franck-Dumetz/ORFeome.git
+```
+```
 # Enter into the ORFeome folder
 cd ORFeome
+```
+```
 # Set up the conda environment
 conda env create -f environment.yml
+```
+```
 # Activate the conda environment
 conda activate ORFeome
 ```
