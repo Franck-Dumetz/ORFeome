@@ -36,7 +36,7 @@ def count_reads(bam, fields):
     else:
         lines = result.stdout.strip().split("\n")
         counts[bam][name] = len(lines)
-    print(f"{bam} {counts[bam][name]}")
+    #print(f"{bam} {counts[bam][name]}")
     return counts
 
 counts = defaultdict(dict)

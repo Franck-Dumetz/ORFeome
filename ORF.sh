@@ -109,13 +109,13 @@ fi
 #SRA -> FASTQ (populates & creates the fastq directory)
 if [[ ! -d fastqs ]]; then
   ./fastq.sh $sras
-  echo "SRAs converted to FASTQs"
+  echo "<<SRAs converted to FASTQs>>"
 fi
 
 #FASTQ -> Trimmed FASTQ (populates & creates the trimmed directory)
 mkdir trimmed
 trim_galore --output_dir trimmed fastqs/*
-echo "FASTQs trimmed"
+echo "<<FASTQs trimmed>>"
 
 #Trimmed FASTQ -> SAM (populates & creates the sam directory)
 mkdir sam
@@ -132,8 +132,8 @@ for file in trimmed/*.fq; do
     bowtie --best --strata -t -v 2 -a -m 10 -S index $file > sam/"${basename}_m10.sam"
   fi
 done
-bowtie --best --strata -t -v 2 -a -m 10 -S index trimmed/
-echo "Bowtie complete"
+#bowtie --best --strata -t -v 2 -a -m 10 -S index trimmed/
+echo "<<Bowtie complete>>"
 
 # SAM -> BAM
 mkdir bam
@@ -141,22 +141,21 @@ mkdir bam
 for file in sam/*; do
   basename="${file##*/}"
   basename=${basename%.*}
-  echo "$file"
   samtools view -S -b $file > bam/"${basename}_unsorted.bam"
   samtools sort -o bam/"${basename}.bam" bam/"${basename}_unsorted.bam"
   samtools index bam/"${basename}.bam"
 done
 
 rm bam/*_unsorted.bam
-echo "BAM files made"
+echo "<<BAM files made>>"
 
 #Trim the gff
 python trim-gff.py $gff
-echo "GFF trimmed"
+echo "<<GFF trimmed>>"
 
 #Run seq-monk (generates counts.csv)
 python seq-monk.py
-echo "SeqMonk complete"
+echo "<<SeqMonk complete>>"
 
 #Create the treatments.csv
 if [[ "$unique" -eq 1 && "$multiple" -eq 1 ]]; then
@@ -171,7 +170,7 @@ fi
 
 #Run Deseq2
 Rscript Deseq2.R
-echo "Deseq analysis complete. Results in overrep_genes.csv"
+echo "<<Deseq analysis complete. Results in foldchange_*.xlsx>>"
 
 #Cleaning all created directories
 rm -r fastqs
