@@ -21,7 +21,8 @@ This pipeline was initially developed for analyzing screens in kinetoplastid par
 - Handles multiple replicates per condition  
 - Computes differential representation of ORFs  
 - Uses DESeq2 for statistical testing  
-- Outputs a list of candidate ORFs over repressented (logFC >4 and FDR < 0.05)
+- Outputs a list of candidate ORFs over repressented (FC =>4 and Adj.pvalue < 0.05)
+- Outputs a list of ORF that remain stable (FC < 4 adj.pvalue < 0.05)
 - Highly customizable for different datasets and experimental designs
 
 ---
