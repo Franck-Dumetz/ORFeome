@@ -4,52 +4,14 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - bowtie=1.3.1
-  - bzip2
-  - ca-certificates
-  - cffi
-  - cutadapt=5.1
-  - dnaio
-  - fastqc
-  - font-ttf-dejavu-sans-mono
-  - fontconfig
-  - freetype
-  - icu
-  - isa-l
-  - libexpat
-  - libffi
-  - libfreetype
-  - libiconv
-  - liblzma
-  - libpng
-  - libsqlite
-  - libuuid
-  - libxcrypt
-  - libxml2
-  - libzlib
-  - ncurses
-  - openjdk=8
-  - openssl=3.5.1
-  - pbzip2
-  - perl
-  - pigz
-  - pip
-  - pycparser
   - python=3.12
-  - python-isal
-  - python-zlib-ng
-  - python_abi
-  - readline
-  - setuptools
-  - tbb
-  - tk
+  - bowtie=1.3.1
+  - cutadapt
+  - samtools
   - trim-galore
-  - tzdata
-  - wheel
-  - xopen
-  - xz
-  - zlib
-  - zlib-ng
-  - zstandard
-  - zstd
-prefix: /home/ashome/.conda/envs/ORFeome
+  - fastqc
+  - sra-tools
+  - pip
+  - r-base=4.2
+  - bioconductor-deseq2
+  - r-openxlsx
