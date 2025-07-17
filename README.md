@@ -44,7 +44,12 @@ cd ORFeome
 ```
 ```
 # Set up the conda environment
-conda env create -f environment.yml
+
+# Linux 
+conda create -n ORFeome --file conda-linux-64.lock
+
+# MacOS
+conda create -n ORFeome --file conda-osx-64.lock
 ```
 ```
 # Activate the conda environment
