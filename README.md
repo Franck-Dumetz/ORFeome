@@ -36,7 +36,6 @@ git clone https://github.com/Franck-Dumetz/ORFeome.git
 # Enter into the ORFeome folder
 cd ORFeome
 ```
-# Set up the conda environment
 ```
 # Linux 
 conda create -n ORFeome --file conda-linux-64.lock
