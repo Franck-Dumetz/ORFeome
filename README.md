@@ -19,16 +19,11 @@ This pipeline was initially developed for analyzing screens in kinetoplastid par
 ## Key Features
 
 - Handles multiple replicates per condition  
-- Computes differential representation of ORFs  
-- Uses DESeq2 for statistical testing  
+- Uses DESeq2 for statistical testing
+- Computes differential representation of ORFs, set your own Fold Change threshold
+- Test the diversity of the control culture
 - Highly customizable for different datasets and experimental designs
 
-
-## Addition from the published method
-
-- Set your own Fold Change thresthold
-- A list of ORF with less than 5 reads in the control sample to test diversity of the culture
-  
 ---
 
 
