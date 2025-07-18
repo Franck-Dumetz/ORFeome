@@ -1,8 +1,18 @@
-import sys
-import subprocess
-import csv
-from collections import defaultdict
-import os
+# ORFeome – Analyzing ORFeome screening data
+# Copyright (C) 2025 Anushka Shome and Franck Dumetz
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see https://www.gnu.org/licenses/.
 
 # This script counts the number of raw reads aligning to each gene in a genome annotation (GFF) file, using one or more input BAM files.
 # It outputs a CSV file where:
@@ -11,6 +21,12 @@ import os
 # - Each cell contains the raw read count for that gene in that sample
 # Requires samtools to be installed in the same environment, as well as the packages in the imports above.
 # Input bam files should also have index files in the same directory.
+
+import sys
+import subprocess
+import csv
+from collections import defaultdict
+import os
 
 def read_gff(fn, bam):
     fields = []

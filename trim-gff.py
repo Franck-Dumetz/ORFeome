@@ -1,3 +1,19 @@
+# ORFeome – Analyzing ORFeome screening data
+# Copyright (C) 2025 Anushka Shome and Franck Dumetz
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see https://www.gnu.org/licenses/.
+
 # This script processes a GFF genome annotation file to retain only CDS (coding sequence) entries.
 # For each CDS, it trims the coordinates to keep only the first 100 bp of the region.
 # - For '+' strand genes, it keeps positions from start to start+99 (or to the original end if shorter)

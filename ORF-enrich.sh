@@ -1,5 +1,28 @@
 #!/bin/bash
 
+# ORFeome – Analyzing ORFeome screening data
+# Copyright (C) 2025 Anushka Shome and Franck Dumetz
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see https://www.gnu.org/licenses/.
+
+# This script automates the analysis of ORFeome screening data. It accepts
+# either SRA accession IDs or FASTQ files as input, performs quality trimming,
+# alignment to a reference genome using Bowtie, BAM file generation and sorting,
+# gene quantification via SeqMonk, and differential expression analysis with DESeq2.
+# Both uniquely and/or multi-mapped reads can be analyzed depending on user flags.
+# Differential expression results are output as Excel files with fold change filtering.
+
 gff=""
 sras=""
 fasta=""
@@ -7,6 +30,7 @@ unique=0
 multiple=0
 treatments=""
 fastqs=""
+fold=""
 
 usage="
 Usage: ./ORF.sh -A <annotation.gff> -G <genome.fasta> -T <treatments.csv> [-R <sra_list.txt> | -F <fastq_directory>] [-u] [-m]
@@ -15,6 +39,7 @@ Required arguments:
   -A  Path to genome annotation file in GFF format.
   -G  Path to genome sequence file in FASTA format.
   -T  Path to treatments CSV file (no header, two columns: sample name, condition).
+  -C  Fold change for differential expression analysis.
 
 Input source (choose one):
   -R  Path to text file with list of SRA accession IDs.
@@ -59,6 +84,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     -F)
       fastqs="$2"
+      shift 2
+      ;;
+    -C)
+      fold="$2"
       shift 2
       ;;
     *)
@@ -154,23 +183,24 @@ python trim-gff.py $gff
 echo "<<GFF trimmed>>"
 
 #Run seq-monk (generates counts.csv)
-python seq-monk.py
+python count-reads.py
 echo "<<SeqMonk complete>>"
 
 #Create the treatments.csv
 if [[ "$unique" -eq 1 && "$multiple" -eq 1 ]]; then
-  python make_csv.py -um $treatments
+  python make-csv.py -um $treatments
 elif [ "$unique" -eq 1 ]; then
-  python make_csv.py -u $treatments
+  python make-csv.py -u $treatments
 else
-  python make_csv.py -m $treatments
+  python make-csv.py -m $treatments
 fi
 
 #echo "Treatments file created"
 
 #Run Deseq2
-Rscript Deseq2.R
-echo "<<Deseq analysis complete. Results in foldchange_*.xlsx>>"
+Rscript Deseq2.R $fold
+echo "<<Deseq analysis complete. Results in foldchange_$fold.xlsx>>"
+echo "<<Genes with no counts are in no-counts.xlsx>>"
 
 #Cleaning all created directories
 rm -r fastqs
