@@ -16,7 +16,6 @@
 
 # This script identifies differentially expressed genes from ORFeome screening data and exports fold-change results to Excel.
 
-library(openxlsx)
 library(DESeq2)
 
 args <- commandArgs(trailingOnly = TRUE)
@@ -53,7 +52,7 @@ get_fc_tables <- function(treated, untreated, norm_counts, dds, replicates) {
     gene_info <- data.frame(
       Gene = gene,
       padj = res[gene, "padj"],
-      FoldChanges = paste0(round(fold_changes, 2), collapse = ", ")
+      FoldChange = mean(fold_changes)
     )
     
     if (max(untreated_vals) < 5) next
@@ -65,13 +64,13 @@ get_fc_tables <- function(treated, untreated, norm_counts, dds, replicates) {
 }
 
 no_counts <- function(untreated, replicates){
-  zero <- data.frame()
+  zero <- data.frame(Gene = character())
   untreated <- unlist(replicates[untreated])
   for (gene in rownames(norm_counts)) {
     untreated_vals <- norm_counts[gene, untreated]
-    if (max(untreated_vals) < 5) zero <- rbind(zero, gene)
+    if (max(untreated_vals) < 5) zero <- rbind(zero, data.frame(Gene = gene))
   }
-  return(list(zero))
+  return(zero)
 }
 
 treated_m1    <- grep("^treated.*_m1$", names(replicate_groups), value = TRUE)
@@ -80,10 +79,10 @@ treated_m10   <- grep("^treated.*_m10$", names(replicate_groups), value = TRUE)
 untreated_m10 <- grep("^untreated.*_m10$", names(replicate_groups), value = TRUE)
 untreated_both <- grep("^untreated", names(replicate_groups), value = TRUE)
 
-zero <- list()
-fc_list <- list()
-
 zero <- no_counts(untreated_both, replicate_groups)
+write.csv(zero, "no-counts.csv", row.names = FALSE)
+
+fc_list <- list()
 
 for (treated in c(treated_m1, treated_m10)) {
   untreated_group <- if (grepl("_m1$", treated)) untreated_m1 else untreated_m10
@@ -96,39 +95,20 @@ for (treated in c(treated_m1, treated_m10)) {
     fc_tables <- get_fc_tables(treated, untreated, norm_counts, dds, replicate_groups)
     
     fc_list[[name]] <- fc_tables$fc
+    
+    if (nrow(fc_tables$fc) > 0) {
+      write.csv(fc_tables$fc, paste0("foldchange_", fc_input, "_", name, ".csv"), row.names = FALSE)
+    }
   }
 }
 
-write_fc_workbook <- function(fc_list, filename) {
-  wb <- createWorkbook()
-  
-  if (length(fc_list) > 0) {
-    common_genes <- Reduce(intersect, lapply(fc_list, function(x) x$Gene))
-    
-    if (length(common_genes) > 0) {
-      common_df <- data.frame(Gene = common_genes)
-      addWorksheet(wb, "CommonHits")
-      writeData(wb, "CommonHits", common_df)
-    }
-    
-    for (name in names(fc_list)) {
-      addWorksheet(wb, name)
-      writeData(wb, name, fc_list[[name]])
-    }
+if (length(fc_list) > 0) {
+  common_genes <- Reduce(intersect, lapply(fc_list, function(x) x$Gene))
+  if (length(common_genes) > 0) {
+    common_df <- data.frame(Gene = common_genes)
+    write.csv(common_df, paste0("foldchange_", fc_input, "_CommonHits.csv"), row.names = FALSE)
   }
-  
-  saveWorkbook(wb, filename, overwrite = TRUE)
 }
-
-write_fc_workbook(fc_list, paste0("foldchange_", fc_input, ".xlsx"))
-
-zero_wb <- createWorkbook()
-
-addWorksheet(zero_wb, "no-counts")
-
-writeData(zero_wb, "no-counts", zero)
-
-saveWorkbook(zero_wb, "no-counts.xlsx", overwrite = TRUE)
 
 zero_wb <- createWorkbook()
 addWorksheet(zero_wb, "no-counts")
