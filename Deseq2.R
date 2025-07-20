@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see https://www.gnu.org/licenses/.
 
-# This script identifies differentially expressed genes from ORFeome screening data and exports fold-change results to Excel.
+# This script identifies differentially expressed genes from ORFeome screening data and saves fold-change results as CSV files.
 
 library(DESeq2)
 
