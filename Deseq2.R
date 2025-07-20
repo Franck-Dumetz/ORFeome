@@ -39,29 +39,29 @@ replicate_groups <- split(colnames(norm_counts), coldata$Condition)
 get_fc_tables <- function(treated, untreated, norm_counts, dds, replicates) {
   contrast <- c("Condition", treated, untreated)
   res <- results(dds, contrast = contrast)
-
+  
   fc <- data.frame()
-
+  
   res <- res[!is.na(res$padj) & res$padj < 0.05, ]
-
+  
   for (gene in rownames(res)) {
     untreated_vals <- norm_counts[gene, replicates[[untreated]]]
     treated_vals   <- norm_counts[gene, replicates[[treated]]]
-
+    
     fold_changes <- treated_vals / untreated_vals
-
+    
     gene_info <- data.frame(
       Gene = gene,
       padj = res[gene, "padj"],
       FoldChanges = paste0(round(fold_changes, 2), collapse = ", ")
     )
-
+    
     if (max(untreated_vals) < 5) next
-
+    
     if (all(fold_changes > fc_input)) fc <- rbind(fc, gene_info)
   }
-
-  return(list(fc))
+  
+  return(list(fc=fc))
 }
 
 no_counts <- function(untreated, replicates){
@@ -92,35 +92,43 @@ for (treated in c(treated_m1, treated_m10)) {
     untreated_name <- gsub("^untreated_", "", untreated)
     name <- paste(treated_name, "vs", untreated_name, sep = "_")
     cat("Running:", name, "\n")
-
+    
     fc_tables <- get_fc_tables(treated, untreated, norm_counts, dds, replicate_groups)
-
-    fc_list[[name]] <- fc_tables
+    
+    fc_list[[name]] <- fc_tables$fc
   }
 }
 
 write_fc_workbook <- function(fc_list, filename) {
   wb <- createWorkbook()
-
+  
   if (length(fc_list) > 0) {
     common_genes <- Reduce(intersect, lapply(fc_list, function(x) x$Gene))
-
+    
     if (length(common_genes) > 0) {
       common_df <- data.frame(Gene = common_genes)
       addWorksheet(wb, "CommonHits")
       writeData(wb, "CommonHits", common_df)
     }
-
+    
     for (name in names(fc_list)) {
       addWorksheet(wb, name)
       writeData(wb, name, fc_list[[name]])
     }
   }
-
+  
   saveWorkbook(wb, filename, overwrite = TRUE)
 }
 
 write_fc_workbook(fc_list, paste0("foldchange_", fc_input, ".xlsx"))
+
+zero_wb <- createWorkbook()
+
+addWorksheet(zero_wb, "no-counts")
+
+writeData(zero_wb, "no-counts", zero)
+
+saveWorkbook(zero_wb, "no-counts.xlsx", overwrite = TRUE)
 
 zero_wb <- createWorkbook()
 addWorksheet(zero_wb, "no-counts")
