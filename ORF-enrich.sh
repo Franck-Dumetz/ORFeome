@@ -199,8 +199,8 @@ fi
 
 #Run Deseq2
 Rscript Deseq2.R $fold
-echo "<<Deseq analysis complete. Results in foldchange_$fold.xlsx>>"
-echo "<<Genes with no counts are in no-counts.xlsx>>"
+echo "<<Deseq analysis complete. Results in foldchange_$fold*.csv>>"
+echo "<<Genes with no counts are in no-counts.csv>>"
 
 #Cleaning all created directories
 rm -r fastqs
