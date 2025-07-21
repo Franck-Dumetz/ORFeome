@@ -137,28 +137,28 @@ fi
 
 #SRA -> FASTQ (populates & creates the fastq directory)
 if [[ ! -d fastqs ]]; then
-  ./fastq.sh $sras
+  ./fastq.sh $sras >> output.log
   echo "<<SRAs converted to FASTQs>>"
 fi
 
 #FASTQ -> Trimmed FASTQ (populates & creates the trimmed directory)
 mkdir trimmed
-trim_galore --output_dir trimmed fastqs/*
+trim_galore --output_dir trimmed fastqs/* >> output.log 2>&1
 echo "<<FASTQs trimmed>>"
 
 #Trimmed FASTQ -> SAM (populates & creates the sam directory)
 mkdir sam
 
-bowtie-build $fasta index
+bowtie-build $fasta index >> output.log
 
 for file in trimmed/*.fq; do
   basename="${file##*/}"
   basename="${basename%_*}"
   if [ "$unique" -eq 1 ]; then
-    bowtie --best --strata -t -v 2 -a -m 1 -S index $file > sam/"${basename}_m1.sam"
+    bowtie --best --strata -t -v 2 -a -m 1 -S index $file > sam/"${basename}_m1.sam" 2>> output.log
   fi
   if [ "$multiple" -eq 1 ]; then
-    bowtie --best --strata -t -v 2 -a -m 10 -S index $file > sam/"${basename}_m10.sam"
+    bowtie --best --strata -t -v 2 -a -m 10 -S index $file > sam/"${basename}_m10.sam" 2>> output.log
   fi
 done
 #bowtie --best --strata -t -v 2 -a -m 10 -S index trimmed/
@@ -170,9 +170,9 @@ mkdir bam
 for file in sam/*; do
   basename="${file##*/}"
   basename=${basename%.*}
-  samtools view -S -b $file > bam/"${basename}_unsorted.bam"
-  samtools sort -o bam/"${basename}.bam" bam/"${basename}_unsorted.bam"
-  samtools index bam/"${basename}.bam"
+  samtools view -S -b $file > bam/"${basename}_unsorted.bam" 2>> output.log
+  samtools sort -o bam/"${basename}.bam" bam/"${basename}_unsorted.bam" 2>> output.log
+  samtools index bam/"${basename}.bam" 2>> output.log
 done
 
 rm bam/*_unsorted.bam
@@ -198,7 +198,7 @@ fi
 #echo "Treatments file created"
 
 #Run Deseq2
-Rscript Deseq2.R $fold
+Rscript Deseq2.R $fold >> output.log 2>&1
 echo "<<Deseq analysis complete. Results in foldchange_$fold*.csv>>"
 echo "<<Genes with no counts are in no-counts.csv>>"
 
