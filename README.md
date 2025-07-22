@@ -23,29 +23,27 @@ This pipeline was initially developed for analyzing screens in kinetoplastid par
 - Computes differential representation of ORFs, set your own Fold Change threshold
 - Test the diversity of the control culture
 - Highly customizable for different datasets and experimental designs
+- support macOS and Linux
 
 ---
 
 
 ## Conda Environment Setup
+# Clone the git repository and enter the the ORFeome directory
 ```
-# Clone the git repository
 git clone https://github.com/Franck-Dumetz/ORFeome.git
-```
-```
-# Enter into the ORFeome folder
 cd ORFeome
 ```
-```
 # Linux 
+```
 conda create -n ORFeome --file conda-linux-64.lock
 ```
-```
 # MacOS
+```
 conda create -n ORFeome --file conda-osx-64.lock
 ```
-```
 # Activate the conda environment
+```
 conda activate ORFeome
 ```
 ```
