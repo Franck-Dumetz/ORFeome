@@ -48,6 +48,10 @@ conda create -n ORFeome --file conda-osx-64.lock
 # Activate the conda environment
 conda activate ORFeome
 ```
+```
+# [Linux only] Fix potential C++ library compatibility issues (required by bowtie)
+./ldlib-links.sh
+```
 
 ## Running the Pipeline
 
