@@ -31,16 +31,16 @@ This pipeline was initially developed for analyzing screens in kinetoplastid par
 ## Conda Environment Setup
 # Clone the git repository and enter the the ORFeome directory
 ```
-git clone https://github.com/Franck-Dumetz/ORFeome.git
-cd ORFeome
+git clone https://github.com/Franck-Dumetz/TbGOF.git
+cd TbGOF
 ```
 # Linux 
 ```
-conda create -n Tbrucei_GoF --file conda-linux-64.lock
+conda create -n TbGOF --file conda-linux-64.lock
 ```
 # MacOS
 ```
-conda create -n Tbrucei_GoF --file conda-osx-64.lock
+conda create -n TbGOF --file conda-osx-64.lock
 ```
 # Activate the conda environment
 ```
