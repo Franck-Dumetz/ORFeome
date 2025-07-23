@@ -79,4 +79,8 @@ Use the following command to run with the provided test data set:
 ```
 ./ORF-enrich.sh -A test-data/test-annot.gff -R test-data/test-sra.txt -G test-data/test-genome.fasta -u -T test-data/test-treatments.csv -C 4
 ```
-
+### Rerunning with Different Fold Changes
+Once you have successfully run the full pipeline once, you can rerun the differential expression step only using different fold-change thresholds without reprocessing all the data:
+```
+Rscript Deseq2.R <fold-change>
+```
