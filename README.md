@@ -44,7 +44,7 @@ conda create -n TbGOF --file conda-osx-64.lock
 ```
 # Activate the conda environment
 ```
-conda activate Tbrucei_GoF
+conda activate TbGOF
 ```
 ```
 # [Linux only] Fix potential C++ library compatibility issues (required by bowtie)
