@@ -126,7 +126,7 @@ untreated_m10 <- grep("^untreated.*_m10$", names(replicate_groups), value = TRUE
 untreated_both <- grep("^untreated", names(replicate_groups), value = TRUE)
 
 zero <- no_counts(untreated_both, replicate_groups)
-write.csv(zero, "no-counts.csv", row.names = FALSE)
+write.csv(zero, "results/no-counts.csv", row.names = FALSE)
 
 fc_list <- list()
 
@@ -143,7 +143,7 @@ for (treated in c(treated_m1, treated_m10)) {
     fc_list[[name]] <- fc_tables$fc
     
     if (nrow(fc_tables$fc) > 0) {
-      write.csv(fc_tables$fc, paste0("foldchange_", fc_input, "_", name, ".csv"), row.names = FALSE)
+      write.csv(fc_tables$fc, paste0("results/foldchange_", fc_input, "_", name, ".csv"), row.names = FALSE)
     }
   }
 }
@@ -155,6 +155,6 @@ if (length(fc_list) > 0) {
     fc_all <- do.call(rbind, lapply(fc_list, as.data.frame))
     common_df <- fc_all[fc_all$Gene %in% common_genes, ]
     common_df <- unique(common_df[, c("Gene", "Description", "Phenotype")])
-    write.csv(common_df, paste0("foldchange_", fc_input, "_CommonHits.csv"), row.names = FALSE)
+    write.csv(common_df, paste0("results/foldchange_", fc_input, "_CommonHits.csv"), row.names = FALSE)
   }
 }
