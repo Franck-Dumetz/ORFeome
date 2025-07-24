@@ -198,9 +198,11 @@ fi
 #echo "Treatments file created"
 
 #Run Deseq2
+mkdir results
 Rscript Deseq2.R $fold >> output.log 2>&1
-echo "<<Deseq analysis complete. Results in foldchange_$fold*.csv>>"
-echo "<<Genes with no counts are in no-counts.csv>>"
+echo "<<DESeq2 analysis complete.>>"
+echo "<<Results saved in: results/foldchange_${fold}*.csv>>"
+echo "<<Genes with no counts are listed in: results/no-counts.csv>>"
 
 #Cleaning all created directories
 rm -r fastqs
