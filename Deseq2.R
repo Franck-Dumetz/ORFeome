@@ -49,11 +49,47 @@ get_fc_tables <- function(treated, untreated, norm_counts, dds, replicates) {
     
     fold_changes <- treated_vals / untreated_vals
     
+    name_and_func <- strsplit(gene, ";")[[1]]
+    nf <- strsplit(name_and_func, "=")
+    named <- setNames(sapply(nf, `[`, 2), sapply(nf, `[`, 1))
+    
     gene_info <- data.frame(
-      Gene = gene,
-      padj = res[gene, "padj"],
-      FoldChange = mean(fold_changes)
+      Gene = as.character(named["ID"]),
+      Description = as.character(named["Name"]),
+      Phenotype = "overrepresented",
+      stringsAsFactors = FALSE
     )
+    
+    treated_cols <- setNames(as.list(treated_vals), paste0("Treated", seq_along(treated_vals)))
+    untreated_cols <- setNames(as.list(untreated_vals), paste0("Untreated", seq_along(untreated_vals)))
+    
+    rep_names <- unlist(mapply(
+      function(t, u) c(t, u),
+      names(treated_cols),
+      names(untreated_cols),
+      SIMPLIFY = TRUE,
+      USE.NAMES = FALSE
+    ))
+    rep_values <- unlist(mapply(
+      function(t, u) list(treated_cols[[t]], untreated_cols[[u]]),
+      names(treated_cols),
+      names(untreated_cols),
+      SIMPLIFY = FALSE
+    ))
+    
+    #rep_df <- as.data.frame(setNames(rep_values, rep_names))
+    rep_df <- as.data.frame(as.list(rep_values))
+    names(rep_df) <- rep_names
+    
+    stats <- data.frame(
+      TreatedAvg = mean(treated_vals),
+      UntreatedAvg = mean(untreated_vals),
+      FoldChange = mean(fold_changes),
+      padj = res[gene, "padj"],
+      stringsAsFactors = FALSE
+    )
+    
+    gene_info <- cbind(gene_info, rep_df, stats)
     
     if (max(untreated_vals) < 5) next
     
@@ -66,9 +102,19 @@ get_fc_tables <- function(treated, untreated, norm_counts, dds, replicates) {
 no_counts <- function(untreated, replicates){
   zero <- data.frame(Gene = character())
   untreated <- unlist(replicates[untreated])
-  for (gene in rownames(norm_counts)) {
-    untreated_vals <- norm_counts[gene, untreated]
-    if (max(untreated_vals) < 5) zero <- rbind(zero, data.frame(Gene = gene))
+  for (gene in rownames(counts)) {
+    untreated_vals <- counts[gene, untreated]
+    
+    name_and_func <- strsplit(gene, ";")[[1]]
+    nf <- strsplit(name_and_func, "=")
+    named <- setNames(sapply(nf, `[`, 2), sapply(nf, `[`, 1))
+    gene_info <- data.frame(
+      Gene = as.character(named["ID"]),
+      Description = as.character(named["Name"]),
+      stringsAsFactors = FALSE
+    )
+    
+    if (max(untreated_vals) == 0) zero <- rbind(zero, gene_info)
   }
   return(zero)
 }
@@ -102,15 +148,13 @@ for (treated in c(treated_m1, treated_m10)) {
   }
 }
 
+# Save common genes to CSV
 if (length(fc_list) > 0) {
   common_genes <- Reduce(intersect, lapply(fc_list, function(x) x$Gene))
   if (length(common_genes) > 0) {
-    common_df <- data.frame(Gene = common_genes)
+    fc_all <- do.call(rbind, lapply(fc_list, as.data.frame))
+    common_df <- fc_all[fc_all$Gene %in% common_genes, ]
+    common_df <- unique(common_df[, c("Gene", "Description", "Phenotype")])
     write.csv(common_df, paste0("foldchange_", fc_input, "_CommonHits.csv"), row.names = FALSE)
   }
 }
-
-zero_wb <- createWorkbook()
-addWorksheet(zero_wb, "no-counts")
-writeData(zero_wb, "no-counts", zero)
-saveWorkbook(zero_wb, "no-counts.xlsx", overwrite = TRUE)
