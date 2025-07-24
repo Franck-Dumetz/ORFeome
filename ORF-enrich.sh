@@ -201,7 +201,7 @@ fi
 mkdir results
 Rscript Deseq2.R $fold >> output.log 2>&1
 echo "<<DESeq2 analysis complete.>>"
-echo "<<Results saved in: results/foldchange_${fold}*.csv>>"
+echo "<<Results saved in: results/foldchange_${fold}_<comparison_name>.csv>>"
 echo "<<Genes with no counts are listed in: results/no-counts.csv>>"
 
 #Cleaning all created directories
