@@ -27,6 +27,8 @@ counts <- as.matrix(counts)
 coldata <- read.csv("treatments.csv", row.names = 1, stringsAsFactors = FALSE)
 coldata$Condition <- factor(coldata$Condition)
 
+dir.create("results", showWarnings = FALSE, recursive = TRUE)
+
 stopifnot(all(rownames(coldata) == colnames(counts)))
 
 dds <- DESeqDataSetFromMatrix(countData = counts, colData = coldata, design = ~Condition)
