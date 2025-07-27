@@ -184,7 +184,7 @@ echo "<<GFF trimmed>>"
 
 #Run seq-monk (generates counts.csv)
 python count-reads.py
-echo "<<SeqMonk complete>>"
+echo "<<Read count complete>>"
 
 #Create the treatments.csv
 if [[ "$unique" -eq 1 && "$multiple" -eq 1 ]]; then
