@@ -205,8 +205,8 @@ echo "<<Results saved in: results/foldchange_${fold}_<comparison_name>.csv>>"
 echo "<<Genes with no counts are listed in: results/no-counts.csv>>"
 
 #Cleaning all created directories
-rm -r fastqs
-rm -r trimmed
+#rm -r fastqs
+#rm -r trimmed
 rm -r sam
-rm -r bam
+#rm -r bam
 
